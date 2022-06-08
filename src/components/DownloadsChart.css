@@ -1,7 +1,11 @@
 /*
   Override styles of Frappe chart
   to disable everything (labels etc) of x axis
+<<<<<<< HEAD
   Note: Styles CAN'T be embedded in <style> of DownloadsChart.svelte - Svelte won't compile it because it thinks they are "not used"
+=======
+  Note: Styles CAN'T be embedded in <style> of Downloads.svelte - Svelte won't compile it because it thinks they are "not used"
+>>>>>>> 8c310d5 (Initial data structure + components)
 */
 .frappe-chart .x.axis {
   display: none;
