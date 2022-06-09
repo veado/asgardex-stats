@@ -3,8 +3,6 @@ import * as O from 'fp-ts/lib/Option';
 import * as NEA from 'fp-ts/lib/NonEmptyArray';
 import * as S from 'fp-ts/lib/string';
 
-export type TotalType = 'commits' | 'contributors' | 'pulls';
-
 /**
  * Helper to parse total number of something at GH (e.g. of commits or contributors)
  * by parsing link header returned by GH API
