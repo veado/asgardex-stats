@@ -20,6 +20,7 @@ import type { Observable } from 'rxjs';
 import type { Option } from 'fp-ts/lib/Option';
 import { toOptionAD, type AsyncData } from '../types/async';
 import {
+	GH_API_URL,
 	INITIAL_COUNTS,
 	INITIAL_DATES,
 	INITIAL_TOP_DOWNLOADS,
@@ -33,8 +34,6 @@ import type {
 	TotalDownloads
 } from '../types/app';
 
-const API_URL = 'https://api.github.com/repos/thorchain/asgardex-electron';
-
 /** State to reload data */
 const reloadReleases$$ = new Rx.BehaviorSubject('');
 const reloadReleases$ = reloadReleases$$.asObservable();
@@ -42,7 +41,7 @@ export const reloadData = () => reloadReleases$$.next('reload');
 
 export const releasesAD$: Observable<AsyncData<Releases>> = FP.pipe(
 	reloadReleases$,
-	RxOp.switchMap(() => RxAjax.ajax.getJSON<Releases>(`${API_URL}/releases`)),
+	RxOp.switchMap(() => RxAjax.ajax.getJSON<Releases>(`${GH_API_URL}/releases`)),
 	RxOp.map(releasesIO.decode),
 	RxOp.map((result) =>
 		// t.Errors -> Error
@@ -50,7 +49,9 @@ export const releasesAD$: Observable<AsyncData<Releases>> = FP.pipe(
 			return Error(`Failed to load release data ${PathReporter.report(result)}`);
 		})(result)
 	),
-	RxOp.catchError((error) => Rx.of(E.left(Error(`Failed to get data from ${API_URL} ${error}`)))),
+	RxOp.catchError((error) =>
+		Rx.of(E.left(Error(`Failed to get data from ${GH_API_URL} ${error}`)))
+	),
 	RxOp.startWith<AsyncData<Releases>>('loading'),
 	RxOp.shareReplay(1)
 );

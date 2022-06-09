@@ -1,6 +1,8 @@
 import type { Counts } from '../types/api';
 import type { Dates, DownloadsChartData, TopDownloads, TotalDownloads } from '../types/app';
 
+export const GH_API_URL = 'https://api.github.com/repos/thorchain/asgardex-electron';
+
 // Breakpoints based on Bootstrap
 // https://getbootstrap.com/docs/4.0/layout/overview/#responsive-breakpoints
 export const BREAKPOINTS = {
