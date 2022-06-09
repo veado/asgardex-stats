@@ -19,8 +19,8 @@ npm run dev
 - [fp-ts](https://gcanti.github.io/fp-ts/)
 - [RxJS](https://rxjs.dev)
 - [Svelte](https://svelte.dev)
-- [Vite](https://vitejs.dev/)
 - [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vitejs.dev/)
 
 ## Licence
 

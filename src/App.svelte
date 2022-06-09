@@ -7,7 +7,7 @@
 
 	import {
 		downloadsChartData$,
-		downloadsGridData$,
+		downloadsTableData$,
 		latestDownloads$,
 		topDownloads$,
 		totalDownloads$,
@@ -15,6 +15,10 @@
 		dates$,
 		reloadData
 	} from './stores/releases';
+
+	import { totalCommitsAD$ } from './stores/commits';
+	import { totalContributorsAD$ } from './stores/contributors';
+	import { totalPullsAD$ } from './stores/pulls';
 
 	$: from = $dates$.start.toLocaleDateString('en-us', {
 		year: 'numeric',
@@ -29,10 +33,12 @@
 </script>
 
 <main class="flex flex-col h-screen">
-	<!-- header -->
-
 	<Header />
-	<!-- <p>releasesAD$ {JSON.stringify($releasesAD$)}</p> -->
+
+	<div>commits {JSON.stringify($totalCommitsAD$)}</div>
+	<div>contributors {JSON.stringify($totalContributorsAD$)}</div>
+	<div>pulls {JSON.stringify($totalPullsAD$)}</div>
+
 	<button class="btn btn-lg" on:click={() => reloadData()}>RELOAD</button>
 	<h1>{$totalReleases$} Releases</h1>
 	<h2>From {from} to {to}</h2>
@@ -45,5 +51,5 @@
 	<!-- chart -->
 	<DownloadsChart data={$downloadsChartData$} />
 	<!-- table -->
-	<DownloadsTable data={$downloadsGridData$} />
+	<DownloadsTable data={$downloadsTableData$} />
 </main>
