@@ -6,11 +6,12 @@
 	export let data: DownloadsTableData = [];
 
 	let w = 0; // bind clientWidth
-	$: hidden = w < BREAKPOINTS.medium; // hide some columns on small devices
+	$: hiddenMedium = w < BREAKPOINTS.medium;
+	$: hiddenSmall = w < BREAKPOINTS.small;
 </script>
 
-<article bind:clientWidth={w}>
-	<h1>All downloads</h1>
+<article class="w-full pt-32" bind:clientWidth={w}>
+	<h1 class="text-4xl text-center text-gray-800">Details</h1>
 	<Grid
 		{data}
 		sort
@@ -22,7 +23,7 @@
 				name: 'Date',
 				// Hidden Columns
 				// https://gridjs.io/docs/examples/hidden-columns
-				hidden,
+				hidden: hiddenMedium,
 				// Column specific sort config
 				// https://gridjs.io/docs/config/sort/#column-specific-sort-config
 				sort: {
@@ -53,9 +54,9 @@
 				}
 			},
 			{ id: 'total', name: 'Total' },
-			{ id: 'win', name: 'Windows', hidden },
-			{ id: 'mac', name: 'macOS', hidden },
-			{ id: 'linux', name: 'Linux', hidden }
+			{ id: 'win', name: 'Windows', hidden: hiddenSmall },
+			{ id: 'mac', name: 'macOS', hidden: hiddenSmall },
+			{ id: 'linux', name: 'Linux', hidden: hiddenSmall }
 		]}
 	/>
 </article>

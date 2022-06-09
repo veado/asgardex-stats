@@ -15,10 +15,12 @@ npm run dev
 
 ## Built with (in alphabetical order)
 
-- [daisyUI](https://daisyui.com)
 - [fp-ts](https://gcanti.github.io/fp-ts/)
+- [Frappe charts](https://frappe.io/charts) / [svelte-frappe-charts](https://github.com/himynameisdave/svelte-frappe-charts)
+- [Grid.js](https://gridjs.io) / [gridjs-svelte](https://github.com/iamyuu/gridjs-svelte)
 - [RxJS](https://rxjs.dev)
 - [Svelte](https://svelte.dev)
+- [tailwindcss](https://tailwindcss.com)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Vite](https://vitejs.dev/)
 

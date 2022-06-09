@@ -19,10 +19,11 @@
 	import { totalCommitsAD$ } from './stores/commits';
 	import { totalContributorsAD$ } from './stores/contributors';
 	import { totalPullsAD$ } from './stores/pulls';
+	import Footer from './components/Footer.svelte';
 
 	$: from = $dates$.start.toLocaleDateString('en-us', {
 		year: 'numeric',
-		month: 'long',
+		month: 'short',
 		day: 'numeric'
 	});
 	$: to = $dates$.end.toLocaleDateString('en-us', {
@@ -32,24 +33,24 @@
 	});
 </script>
 
-<main class="flex flex-col h-screen">
+<main class="flex flex-col">
 	<Header />
-
-	<div>commits {JSON.stringify($totalCommitsAD$)}</div>
-	<div>contributors {JSON.stringify($totalContributorsAD$)}</div>
-	<div>pulls {JSON.stringify($totalPullsAD$)}</div>
-
-	<button class="btn btn-lg" on:click={() => reloadData()}>RELOAD</button>
-	<h1>{$totalReleases$} Releases</h1>
-	<h2>From {from} to {to}</h2>
-	<!-- total downloads -->
-	<TotalDownloads downloads={$totalDownloads$} />
-	<!-- top downloads -->
-	<TopDownloads downloads={$topDownloads$} headline="Top downloads" />
-	<!-- latest downloads -->
-	<TopDownloads downloads={$latestDownloads$} headline="Latest downloads" />
-	<!-- chart -->
-	<DownloadsChart data={$downloadsChartData$} />
-	<!-- table -->
-	<DownloadsTable data={$downloadsTableData$} />
+	<div class="container mx-auto max-w-6xl px-6">
+		<h1 class="text-7xl text-center mt-24 text-gray-800 ">Downloads</h1>
+		<!-- total downloads -->
+		<TotalDownloads
+			downloads={$totalDownloads$}
+			headline="All releases"
+			subheadline="{from} - {to}"
+		/>
+		<!-- top downloads -->
+		<TopDownloads downloads={$topDownloads$} headline="Top release" />
+		<!-- latest downloads -->
+		<TopDownloads downloads={$latestDownloads$} headline="Latest release" />
+		<!-- chart -->
+		<DownloadsChart data={$downloadsChartData$} />
+		<!-- table -->
+		<DownloadsTable data={$downloadsTableData$} />
+	</div>
+	<Footer />
 </main>

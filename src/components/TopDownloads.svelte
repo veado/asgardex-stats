@@ -14,10 +14,12 @@
 		month: 'short',
 		day: 'numeric'
 	});
+
+	$: subheadline = `${downloads.version} (${date})`;
 </script>
 
-<article>
-	<h1>{headline}</h1>
-	<h2>{downloads.version} ({date})</h2>
+<article class="w-full pt-32">
+	<h1 class="text-4xl text-center text-gray-800">{headline}</h1>
+	<h2 class="text-xl text-center text-gray-400 italic">{subheadline}</h2>
 	<Downloads counts={downloads.counts} />
 </article>

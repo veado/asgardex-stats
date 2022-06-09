@@ -9,8 +9,8 @@
 	$: chartData = data.datasets.length > 0 ? data : INITIAL_DOWNLOADS_CHART_DATA;
 </script>
 
-<article>
-	<h1>All downloads</h1>
+<article class="w-full pt-32">
+	<h1 class="text-4xl text-center text-gray-800">Timeline</h1>
 	<Chart
 		data={chartData}
 		type="bar"
