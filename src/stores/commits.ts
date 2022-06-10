@@ -1,10 +1,9 @@
 import * as Rx from 'rxjs';
 import * as RxAjax from 'rxjs/ajax';
-import type { AsyncData } from 'src/types/async';
 import * as FP from 'fp-ts/lib/function';
 import { GH_API_URL } from './const';
 import * as RxOp from 'rxjs/operators';
-import * as E from 'fp-ts/lib/Either';
+import * as AD from '../utils/async';
 import { parseTotalFromHeaders } from '../utils/gh';
 
 /** State to reload data */
@@ -12,15 +11,20 @@ const reload$$ = new Rx.BehaviorSubject('');
 const reload$ = reload$$.asObservable();
 export const reload = () => reload$$.next('reload');
 
+const URL = `${GH_API_URL}/commits?per_page=1`;
+
 /**
  * Get total no of commits via GH Api
  * @see https://docs.github.com/en/rest/commits/commits#list-commits
  */
-export const totalCommitsAD$: Rx.Observable<AsyncData<number>> = FP.pipe(
+export const totalCommitsAD$: Rx.Observable<AD.AsyncData<Error, number>> = FP.pipe(
 	reload$,
-	RxOp.switchMap(() => RxAjax.ajax.get(`${GH_API_URL}/commits?per_page=1`)),
+	RxOp.switchMap(() => RxAjax.ajax.get(URL)),
 	RxOp.map(({ responseHeaders }) => parseTotalFromHeaders(responseHeaders)),
-	RxOp.map(E.fromOption(() => Error('Could not parse total commits'))),
-	RxOp.startWith<AsyncData<number>>('loading'),
+	RxOp.map(AD.fromOption(() => Error('Could not parse total commits'))),
+	RxOp.catchError((error) =>
+		Rx.of(AD.error(Error(`Failed to get contributors from ${URL} ${error}`)))
+	),
+	RxOp.startWith(AD.pending),
 	RxOp.shareReplay(1)
 );
