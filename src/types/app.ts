@@ -1,15 +1,12 @@
+import type * as AD from '../utils/async';
 import type { Counts } from './api';
-
-export type TotalDownloads = {
-	startDate: Date;
-	endDate: Date;
-	counts: Counts;
-};
 
 export type Dates = {
 	start: Date;
 	end: Date;
 };
+
+export type DatesAD = AD.AsyncData<Error, Dates>;
 
 export type TopDownloads = {
 	version: string;
@@ -17,10 +14,14 @@ export type TopDownloads = {
 	counts: Counts;
 };
 
+export type TopDownloadsAD = AD.AsyncData<Error, TopDownloads>;
+
 export type DownloadsChartData = {
 	labels: string[];
 	datasets: Array<{ name: string; values: number[] }>;
 };
+
+export type DownloadsChartDataAD = AD.AsyncData<Error, DownloadsChartData>;
 
 export type DownloadsTableData = Array<{
 	version: string;
@@ -30,3 +31,5 @@ export type DownloadsTableData = Array<{
 	mac: number;
 	linux: number;
 }>;
+
+export type DownloadsTableDataAD = AD.AsyncData<Error, DownloadsTableData>;

@@ -1,5 +1,5 @@
 import type { Counts } from '../types/api';
-import type { Dates, DownloadsChartData, TopDownloads, TotalDownloads } from '../types/app';
+import type { Dates, DownloadsChartData, TopDownloads } from '../types/app';
 
 export const GH_API_URL = 'https://api.github.com/repos/thorchain/asgardex-electron';
 
@@ -20,12 +20,6 @@ export const INITIAL_COUNTS: Counts = {
 	win: 0,
 	linux: 0,
 	mac: 0
-};
-
-export const INITIAL_TOTAL_DOWNLOADS: TotalDownloads = {
-	startDate: new Date('2022-06-09T00:00:00'), // anytime in the "middle" of previous releases
-	endDate: new Date('2020-01-01T00:00:00'), // anytime before first release
-	counts: INITIAL_COUNTS
 };
 
 export const INITIAL_TOP_DOWNLOADS: TopDownloads = {

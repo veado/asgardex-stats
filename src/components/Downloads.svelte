@@ -1,31 +1,45 @@
 <script lang="ts">
-	import { INITIAL_COUNTS } from '../stores/const';
+	import * as AD from '../utils/async';
+	import * as FP from 'fp-ts/lib/function';
 
-	import type { Counts } from '../types/api';
+	import type { CountsAD } from '../types/api';
+	import Card from './Card.svelte';
+	import CardsContainer from './CardsContainer.svelte';
+	import { renderAsyncValue } from '../utils/render';
 
-	export let counts: Counts = INITIAL_COUNTS;
+	export let counts: CountsAD;
 
-	$: total = counts.win + counts.linux + counts.mac;
+	$: total = FP.pipe(
+		counts,
+		AD.map((c) => c.win + c.linux + c.mac),
+		renderAsyncValue
+	);
+
+	$: mac = FP.pipe(
+		counts,
+		AD.map((c) => c.mac),
+		renderAsyncValue
+	);
+
+	$: win = FP.pipe(
+		counts,
+		AD.map((c) => c.win),
+		renderAsyncValue
+	);
+
+	$: linux = FP.pipe(
+		counts,
+		AD.map((c) => c.linux),
+		renderAsyncValue
+	);
+
+	$: loading = FP.pipe(counts, AD.isPending);
+	$: error = FP.pipe(counts, AD.isError);
 </script>
 
-<div class="stats shadow">
-	<div class="stat">
-		<div class="stat-title">Total</div>
-		<div class="stat-value">{total}</div>
-	</div>
-
-	<div class="stat">
-		<div class="stat-title">macOS</div>
-		<div class="stat-value">{counts.mac}</div>
-	</div>
-
-	<div class="stat">
-		<div class="stat-title">Linux</div>
-		<div class="stat-value">{counts.linux}</div>
-	</div>
-
-	<div class="stat">
-		<div class="stat-title">Windows</div>
-		<div class="stat-value">{counts.win}</div>
-	</div>
-</div>
+<CardsContainer>
+	<Card border title="Total" text={total} {loading} {error} />
+	<Card border title="Windows" text={win} {loading} {error} />
+	<Card border title="macOS" text={mac} {loading} {error} />
+	<Card border title="Linux" text={linux} {loading} {error} />
+</CardsContainer>
