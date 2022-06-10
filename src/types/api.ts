@@ -5,6 +5,7 @@
 import * as t from 'io-ts';
 import * as FP from 'fp-ts/lib/function';
 import * as E from 'fp-ts/lib/Either';
+import type * as AD from '../utils/async';
 
 // `dateIO` based on `DateFromISOString`
 // @see https://github.com/gcanti/io-ts-types/blob/master/src/DateFromISOString.ts
@@ -46,8 +47,12 @@ export const releasesIO = t.array(releaseIO);
 
 export type Releases = t.TypeOf<typeof releasesIO>;
 
+export type ReleasesAD = AD.AsyncData<Error, Releases>;
+
 export type OS = 'mac' | 'linux' | 'win';
 export type Counts = Record<OS, number>;
+
+export type CountsAD = AD.AsyncData<Error, Counts>;
 
 export type Download = {
 	version: string;
@@ -56,4 +61,7 @@ export type Download = {
 	counts: Counts;
 };
 
+export type DownloadAD = AD.AsyncData<Error, Download>;
+
 export type Downloads = Download[];
+export type DownloadsAD = AD.AsyncData<Error, Downloads>;

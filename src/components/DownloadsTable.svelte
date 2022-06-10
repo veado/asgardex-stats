@@ -1,9 +1,21 @@
 <script lang="ts">
 	import 'gridjs/dist/theme/mermaid.css';
 	import Grid from 'gridjs-svelte';
-	import type { DownloadsTableData } from '../types/app';
+	import type { DownloadsTableData, DownloadsTableDataAD } from '../types/app';
 	import { BREAKPOINTS } from '../stores/const';
-	export let data: DownloadsTableData = [];
+	import * as AD from '../utils/async';
+	import * as FP from 'fp-ts/lib/function';
+	import * as O from 'fp-ts/lib/Option';
+
+	export let subheadline;
+
+	export let data: DownloadsTableDataAD;
+
+	$: tableData = FP.pipe(
+		data,
+		AD.toOption,
+		O.getOrElse(() => [])
+	);
 
 	let w = 0; // bind clientWidth
 	$: hiddenMedium = w < BREAKPOINTS.medium;
@@ -12,8 +24,9 @@
 
 <article class="w-full pt-32" bind:clientWidth={w}>
 	<h1 class="text-4xl text-center text-gray-800">Details</h1>
+	<h2 class="text-xl text-center text-gray-400 italic">{subheadline}</h2>
 	<Grid
-		{data}
+		data={tableData}
 		sort
 		search
 		columns={[

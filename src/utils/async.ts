@@ -13,6 +13,10 @@ import * as FP from 'fp-ts/lib/function';
 
 export type AsyncData<E, A> = O.Option<E.Either<E, A>>;
 
+export const map: <A, B>(f: (a: A) => B) => <E>(fa: AsyncData<E, A>) => AsyncData<E, B> = ET.map(
+	O.Monad
+);
+
 export const matchE: <E, A, B>(
 	onLeft: (e: E) => O.Option<B>,
 	onRight: (a: A) => O.Option<B>
@@ -52,9 +56,8 @@ export const toOption: <E, A>(ma: AsyncData<E, A>) => O.Option<A> = getOrElse(()
  * Fold all states
  */
 export const foldA: <E, A, T>(
-	ma: AsyncData<E, A>,
 	onPending: () => T,
 	onError: (e: E) => T,
 	onSuccess: (a: A) => T
-) => T = (ma, onPending, onError, onSuccess) =>
+) => (ma: AsyncData<E, A>) => T = (onPending, onError, onSuccess) => (ma) =>
 	FP.pipe(ma, O.fold(onPending, E.fold(onError, onSuccess)));

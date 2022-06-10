@@ -2,9 +2,13 @@
 
 _Statistics of [ASGARDEX desktop releases](https://github.com/thorchain/asgardex-electron/releases)_
 
+**LIVE** :eyes: https://veado.github.io/asgardex-stats/
+
+![Preview](./preview.gif)
+
 ### Where does the data come from?
 
-Release data are fetched from GitHub API https://api.github.com/repos/thorchain/asgardex-electron/releases
+All data are consumed from GitHub API https://docs.github.com/rest
 
 ### Local development
 
