@@ -18,7 +18,7 @@ import type * as t from 'io-ts';
 import { PathReporter } from 'io-ts/lib/PathReporter';
 import type { Observable } from 'rxjs';
 import type { Option } from 'fp-ts/lib/Option';
-import { toOptionAD, type AsyncData } from '../types/async';
+import * as AD from '../utils/async';
 import {
 	GH_API_URL,
 	INITIAL_COUNTS,
@@ -39,9 +39,12 @@ const reloadReleases$$ = new Rx.BehaviorSubject('');
 const reloadReleases$ = reloadReleases$$.asObservable();
 export const reloadData = () => reloadReleases$$.next('reload');
 
-export const releasesAD$: Observable<AsyncData<Releases>> = FP.pipe(
+export const releasesAD$: Observable<AD.AsyncData<Error, Releases>> = FP.pipe(
 	reloadReleases$,
 	RxOp.switchMap(() => RxAjax.ajax.getJSON<Releases>(`${GH_API_URL}/releases`)),
+	RxOp.catchError((error) =>
+		Rx.of(E.left(Error(`Failed to get data from ${GH_API_URL} ${error}`)))
+	),
 	RxOp.map(releasesIO.decode),
 	RxOp.map((result) =>
 		// t.Errors -> Error
@@ -49,10 +52,8 @@ export const releasesAD$: Observable<AsyncData<Releases>> = FP.pipe(
 			return Error(`Failed to load release data ${PathReporter.report(result)}`);
 		})(result)
 	),
-	RxOp.catchError((error) =>
-		Rx.of(E.left(Error(`Failed to get data from ${GH_API_URL} ${error}`)))
-	),
-	RxOp.startWith<AsyncData<Releases>>('loading'),
+	RxOp.map(AD.fromEither),
+	RxOp.startWith(AD.pending),
 	RxOp.shareReplay(1)
 );
 
@@ -61,7 +62,7 @@ export const releasesAD$: Observable<AsyncData<Releases>> = FP.pipe(
  */
 const releases$: Observable<Releases | []> = FP.pipe(
 	releasesAD$,
-	Rx.map(toOptionAD),
+	Rx.map(AD.toOption),
 	Rx.map(O.getOrElse(() => []))
 );
 
