@@ -3,6 +3,14 @@ import type { Dates, DownloadsChartData, TopDownloads } from '../types/app';
 
 export const GH_API_URL = 'https://api.github.com/repos/thorchain/asgardex-electron';
 
+const GH_TOKEN = import.meta.env?.VITE_GH_TOKEN ?? '';
+
+export const GH_HEADERS = GH_TOKEN
+	? {
+			authorization: `token ${GH_TOKEN}`
+	  }
+	: undefined;
+
 // Breakpoints based on Bootstrap
 // https://getbootstrap.com/docs/4.0/layout/overview/#responsive-breakpoints
 export const BREAKPOINTS = {

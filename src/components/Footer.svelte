@@ -1,6 +1,6 @@
-<footer class="w-full flex justify-center py-12 mt-12 bg-gray-800">
+<footer class="w-full flex flex-col justify-center items-center py-12 mt-12 bg-gray-800">
 	<a
-		class="bg-gray-400 hover:bg-gray-100 w-8 h-8 rounded-full"
+		class="bg-gray-400 hover:bg-gray-100 w-8 h-8 rounded-full mb-2"
 		href="https://github.com/veado/asgardex-stats"
 		><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="inline-block"
 			><path
@@ -8,4 +8,11 @@
 			/></svg
 		></a
 	>
+	<a
+		class="text-[0.75em] text-gray-400 hover:text-gray-100 text-center"
+		href="https://github.com/veado/asgardex-stats/commit/{import.meta.env.VITE_COMMIT_HASH}"
+	>
+		<span>v{import.meta.env.VITE_VERSION}</span><br />
+		<span>({import.meta.env.VITE_COMMIT_HASH})</span>
+	</a>
 </footer>

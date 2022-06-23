@@ -43,6 +43,8 @@ export const releaseIO = t.type({
 	assets: assetsIO
 });
 
+export type Release = t.TypeOf<typeof releaseIO>;
+
 export const releasesIO = t.array(releaseIO);
 
 export type Releases = t.TypeOf<typeof releasesIO>;

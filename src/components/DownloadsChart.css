@@ -4,5 +4,5 @@
   Note: Styles CAN'T be embedded in <style> of DownloadsChart.svelte - Svelte won't compile it because it thinks they are "not used"
 */
 .frappe-chart .x.axis {
-  display: none;
+	display: none;
 }

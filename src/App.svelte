@@ -50,7 +50,7 @@
 		pulls={$totalPullsAD$}
 		commits={$totalCommitsAD$}
 	/>
-	>
+
 	<div class="container mx-auto max-w-6xl px-6">
 		<h1 class="text-7xl text-center mt-24 text-gray-800 ">Downloads</h1>
 		<!-- total downloads -->
