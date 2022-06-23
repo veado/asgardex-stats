@@ -1,30 +1,23 @@
-import * as RxAjax from 'rxjs/ajax';
 import * as FP from 'fp-ts/lib/function';
-import type {
-	Assets,
-	Counts,
-	CountsAD,
-	Downloads,
-	DownloadsAD,
-	OS,
-	Releases,
-	ReleasesAD
-} from '../types/api';
-
+import type { CountsAD, DownloadsAD, Releases, ReleasesAD } from '../types/api';
+import * as RxAjax from 'rxjs/ajax';
 import * as E from 'fp-ts/lib/Either';
 import * as Rx from 'rxjs';
 import { releasesIO } from '../types/api';
 import * as A from 'fp-ts/lib/Array';
 import * as RxOp from 'rxjs/operators';
 
-import * as O from 'fp-ts/lib/Option';
-
 import type * as t from 'io-ts';
 import { PathReporter } from 'io-ts/lib/PathReporter';
 import type { Observable } from 'rxjs';
-import type { Option } from 'fp-ts/lib/Option';
 import * as AD from '../utils/async';
-import { GH_API_URL, INITIAL_COUNTS, INITIAL_DATES, INITIAL_TOP_DOWNLOADS } from './const';
+import {
+	GH_API_URL,
+	GH_HEADERS,
+	INITIAL_COUNTS,
+	INITIAL_DATES,
+	INITIAL_TOP_DOWNLOADS
+} from './const';
 import type {
 	DatesAD,
 	DownloadsChartData,
@@ -34,6 +27,7 @@ import type {
 	TopDownloadsAD
 } from '../types/app';
 import { ordDownload } from '../utils/ord';
+import { toDownloads } from '../utils/api';
 
 /** State to reload data */
 const reloadReleases$$ = new Rx.BehaviorSubject('');
@@ -42,7 +36,9 @@ export const reload = () => reloadReleases$$.next('reload');
 
 export const releasesAD$: Observable<ReleasesAD> = FP.pipe(
 	reloadReleases$,
-	RxOp.switchMap(() => RxAjax.ajax.getJSON<Releases>(`${GH_API_URL}/releases`)),
+	RxOp.switchMap(() =>
+		RxAjax.ajax.getJSON<Releases>(`${GH_API_URL}/releases?per_page=100`, GH_HEADERS)
+	),
 	RxOp.catchError((error) =>
 		Rx.of(E.left(Error(`Failed to get data from ${GH_API_URL} ${error}`)))
 	),
@@ -58,55 +54,8 @@ export const releasesAD$: Observable<ReleasesAD> = FP.pipe(
 	RxOp.shareReplay(1)
 );
 
-const toCounts = (assets: Assets): Counts =>
-	FP.pipe(
-		assets,
-		A.reduce(INITIAL_COUNTS, (acc, curr) => {
-			const { browser_download_url: path, download_count } = curr;
-
-			return FP.pipe(
-				toOS(path),
-				O.map((os) => ({ ...acc, [os]: download_count })),
-				O.getOrElse(() => acc)
-			);
-		})
-	);
-
-const toDownloads = (releases: Releases): Downloads =>
-	FP.pipe(
-		releases,
-		A.reduce([], (acc, curr) => {
-			const { draft, tag_name, published_at, assets } = curr;
-
-			if (draft) return acc;
-
-			const download = {
-				version: tag_name,
-				date: published_at,
-				counts: toCounts(assets)
-			};
-
-			return [...acc, download];
-		})
-	);
-
-const isLinux = (path: string) => path.match(/^.*\.(deb|AppImage)$/);
-const isMac = (path: string) => path.match(/^.*\.dmg$/);
-const isWin = (path: string) => path.match(/^.*\.exe$/);
-
-const toOS = (path: string): Option<OS> => {
-	if (isLinux(path)) return O.some('linux');
-	if (isMac(path)) return O.some('mac');
-	if (isWin(path)) return O.some('win');
-	return O.none;
-};
-
 export const downloadsAD$: Rx.Observable<DownloadsAD> = FP.pipe(
 	releasesAD$,
-	RxOp.tap((v) => {
-		console.log('dowl');
-		return v;
-	}),
 	RxOp.map(AD.map(toDownloads)),
 	RxOp.shareReplay(1)
 );
