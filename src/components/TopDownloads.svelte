@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { TopDownloads, TopDownloadsAD } from '../types/app';
+	import type { TopDownloadsAD } from '../types/app';
 	import * as FP from 'fp-ts/lib/function';
 	import * as AD from '../utils/async';
 

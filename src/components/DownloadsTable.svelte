@@ -1,13 +1,13 @@
 <script lang="ts">
 	import 'gridjs/dist/theme/mermaid.css';
 	import Grid from 'gridjs-svelte';
-	import type { DownloadsTableData, DownloadsTableDataAD } from '../types/app';
+	import type { DownloadsTableDataAD } from '../types/app';
 	import { BREAKPOINTS } from '../stores/const';
 	import * as AD from '../utils/async';
 	import * as FP from 'fp-ts/lib/function';
 	import * as O from 'fp-ts/lib/Option';
 
-	export let subheadline;
+	export let subheadline: string;
 
 	export let data: DownloadsTableDataAD;
 
