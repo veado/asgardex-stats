@@ -13,12 +13,11 @@
 		totalCountsAD$,
 		totalReleasesAD$,
 		totalDownloadsAD$,
-		datesAD$,
-		reload as reloadReleases
+		datesAD$
 	} from './stores/releases';
 
-	import { totalCommitsAD$, reload as reloadCommits } from './stores/commits';
-	import { totalPullsAD$, reload as releodPulls } from './stores/pulls';
+	import { totalCommitsAD$ } from './stores/commits';
+	import { totalPullsAD$ } from './stores/pulls';
 	import Footer from './components/Footer.svelte';
 	import * as FP from 'fp-ts/lib/function';
 	import * as AD from './utils/async';

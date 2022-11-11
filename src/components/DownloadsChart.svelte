@@ -8,7 +8,7 @@
 
 	import Chart from 'svelte-frappe-charts';
 
-	export let subheadline;
+	export let subheadline: string;
 	export let data: DownloadsChartDataAD;
 
 	$: chartData = FP.pipe(
