@@ -26,6 +26,13 @@
 	<h1 class="text-4xl text-center text-gray-800">Details</h1>
 	<h2 class="text-xl text-center text-gray-400 italic">{subheadline}</h2>
 	<Grid
+		style={{
+			// Custom style
+			// https://gridjs.io/docs/config/style/
+			table: {
+				width: '100%'
+			}
+		}}
 		data={tableData}
 		sort
 		search
